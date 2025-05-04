@@ -1,0 +1,25 @@
+name: test
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+
+jobs:
+  test-setup:
+    name: Setup test
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      DEBUG: true
+    steps:
+      -
+        uses: actions/checkout@v4
+      -
+        uses: ./
+      -
+        name: Run gocredits
+        run: gocredits -version
