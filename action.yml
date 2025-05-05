@@ -69,8 +69,14 @@ runs:
         if ($expected -eq $null) {
           $expected = ''
         }
-        Compare-Object $actual $expected
-        echo "exitcode=$LASTEXITCODE" >> $env:GITHUB_OUTPUT
+        $diff = Compare-Object $actual $expected
+        if ($diff) {
+          $diff | Format-Table
+          Write-Host "Difference detected."
+          echo "exitcode=1" >> $env:GITHUB_OUTPUT
+        } else {
+          echo "exitcode=0" >> $env:GITHUB_OUTPUT
+        }
     - name: Check gocredits on Linux/macOS
       id: check-gocredits-linux
       if: inputs.mode == 'check' && runner.os != 'Windows'
