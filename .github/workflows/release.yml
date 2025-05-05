@@ -7,5 +7,14 @@ jobs:
   update-semver:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/create-github-app-token@v2
+        id: app-token
+        with:
+          app-id: ${{ vars.APP_ID }}
+          private-key: ${{ secrets.PRIVATE_KEY }}
       - uses: actions/checkout@v4
+        with:
+          token: ${{ steps.app-token.outputs.token }}
       - uses: haya14busa/action-update-semver@v1
+        with:
+          github_token: ${{ steps.app-token.outputs.token }}
