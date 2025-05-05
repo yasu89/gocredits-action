@@ -24,7 +24,7 @@ jobs:
     - uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
       with:
         go-version: stable
-    - uses: yasu89/gocredits-action@v1
+    - uses: yasu89/gocredits-action@de0d1b0dbcf41cbb27ef205029e65454045790ee # v1.0.0
 ```
 
 ## Update credits file
@@ -49,7 +49,7 @@ jobs:
     - uses: actions/setup-go@0aaccfd150d50ccaeb58ebd88d36e91967a5f35b # v5.4.0
       with:
         go-version: stable
-    - uses: yasu89/gocredits-action@v1
+    - uses: yasu89/gocredits-action@de0d1b0dbcf41cbb27ef205029e65454045790ee # v1.0.0
       with:
         mode: 'update'
 ```
