@@ -115,7 +115,7 @@ runs:
       if: inputs.mode == 'update'
       uses: suzuki-shunsuke/commit-action@cc96d3a3fd959d05e9b79ca395eb30b835aeba24 # v0.0.7
       with:
-        github-token: ${{ inputs.github-token }}
+        github_token: ${{ inputs.github-token }}
         commit_message: 'Update credits file'
         files: |
           ${{ inputs.credits_file }}
