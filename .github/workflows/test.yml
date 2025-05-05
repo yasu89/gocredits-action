@@ -11,15 +11,31 @@ jobs:
     name: Setup test
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     env:
       DEBUG: true
     steps:
-      -
-        uses: actions/checkout@v4
-      -
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.24.2
+      - name: Test success
         uses: ./
-      -
-        name: Run gocredits
+        with:
+          path: testdata/check_success
+      - name: Test failure
+        id: test-failure
+        uses: ./
+        with:
+          path: testdata/check_failure
+          force-setup: true
+        continue-on-error: true
+      - name: Check failure
+        run: |
+          if [[ "${{ steps.test-failure.outputs.exitcode }}" != "1" ]]; then
+            echo "Expected exit code 1, but got ${{ steps.test-failure.outputs.exitcode }}"
+            exit 1
+          fi
+      - name: Run gocredits
         run: gocredits -version

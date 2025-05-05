@@ -13,10 +13,25 @@ inputs:
     description: 'Version of gocredits'
     default: 'latest'
     required: false
-  force:
+  force-setup:
     description: 'Enable force setup'
     default: ''
     required: false
+  mode:
+    description: 'Mode'
+    default: 'check'
+    required: false
+  credits_file:
+    description: 'Path to the credits file'
+    default: 'CREDITS'
+    required: false
+  path:
+    description: 'Relative path under $GITHUB_WORKSPACE to execute gocredits'
+    required: false
+outputs:
+  exitcode:
+    description: 'Exit code of gocredits'
+    value: ${{ steps.check-gocredits.outputs.exitcode }}
 runs:
   using: 'composite'
   steps:
@@ -33,7 +48,7 @@ runs:
         elif [[ "$RUNNER_OS" == "Windows" ]]; then
           echo $(cygpath -w "${{ steps.set-path.outputs.path }}") >> $GITHUB_PATH
         fi
-    -
+    - name: Setup gocredits
       uses: k1LoW/gh-setup@v1
       with:
         repo: github.com/Songmu/gocredits
@@ -41,5 +56,16 @@ runs:
         version: ${{ inputs.version }}
         bin-match: gocredits
         strict: true
-        force: ${{ inputs.force }}
+        force: ${{ inputs.force-setup }}
         bin-dir: ${{ steps.set-path.outputs.path }}
+    - name: Check gocredits
+      id: check-gocredits
+      if: inputs.mode == 'check'
+      shell: bash
+      run: |
+        set +e
+        cd ${{ inputs.path }}
+        diff <(gocredits) ${{ inputs.credits_file}}
+        exitcode="$?"
+        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+        exit "$exitcode"
