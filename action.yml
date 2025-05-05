@@ -31,12 +31,7 @@ inputs:
 outputs:
   exitcode:
     description: 'Exit code of gocredits'
-    value: |
-      if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
-        ${{ steps.check-gocredits-linux.outputs.exitcode }}
-      elif [[ "$RUNNER_OS" == "Windows" ]]; then
-        ${{ steps.check-gocredits-windows.outputs.exitcode }}
-      fi
+    value: ${{ steps.check-gocredits-result.outputs.exitcode }}
 runs:
   using: 'composite'
   steps:
@@ -78,7 +73,6 @@ runs:
         Compare-Object $actual $expected
         exitcode="$?"
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-        exit "$exitcode"
     - name: Check gocredits on Linux/macOS
       id: check-gocredits-linux
       if: inputs.mode == 'check' && runner.os != 'Windows'
@@ -89,4 +83,16 @@ runs:
         diff <(gocredits) ${{ inputs.credits_file }}
         exitcode="$?"
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
-        exit "$exitcode"
+    - name: Setup check gocredits output
+      id: check-gocredits-result
+      if: inputs.mode == 'check'
+      shell: bash
+      run: |
+        if [[ "$RUNNER_OS" == "Linux" || "$RUNNER_OS" == "macOS" ]]; then
+          echo "exitcode=${{ steps.check-gocredits-linux.outputs.exitcode }}" >> $GITHUB_OUTPUT
+          exit ${{ steps.check-gocredits-linux.outputs.exitcode }}
+        elif [[ "$RUNNER_OS" == "Windows" ]]; then
+          echo "exitcode=${{ steps.check-gocredits-windows.outputs.exitcode }}" >> $GITHUB_OUTPUT
+          exit ${{ steps.check-gocredits-windows.outputs.exitcode }}
+        fi
+
