@@ -61,9 +61,8 @@ runs:
     - name: Check gocredits on Windows
       id: check-gocredits-windows
       if: inputs.mode == 'check' && runner.os == 'Windows'
-      shell: bash
+      shell: pwsh
       run: |
-        set +e
         cd ${{ inputs.path }}
         $actual = gocredits | Out-String
         $expected = if (Test-Path '${{ inputs.credits_file }}') { Get-Content -Raw '${{ inputs.credits_file }}' } else { '' }
@@ -71,8 +70,7 @@ runs:
           $expected = ''
         }
         Compare-Object $actual $expected
-        exitcode="$?"
-        echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
+        echo "exitcode=$LASTEXITCODE" >> $env:GITHUB_OUTPUT
     - name: Check gocredits on Linux/macOS
       id: check-gocredits-linux
       if: inputs.mode == 'check' && runner.os != 'Windows'
