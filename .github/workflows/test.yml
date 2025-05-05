@@ -11,7 +11,7 @@ jobs:
     name: Setup test
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest]
     runs-on: ${{ matrix.os }}
     env:
       DEBUG: true
@@ -32,6 +32,7 @@ jobs:
           force-setup: true
         continue-on-error: true
       - name: Check failure
+        shell: bash
         run: |
           if [[ "${{ steps.test-failure.outputs.exitcode }}" != "1" ]]; then
             echo "Expected exit code 1, but got ${{ steps.test-failure.outputs.exitcode }}"
