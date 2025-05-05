@@ -19,7 +19,7 @@ inputs:
     required: false
   mode:
     description: 'Mode'
-    default: 'check'
+    default: 'check/update'
     required: false
   credits_file:
     description: 'Path to the credits file'
@@ -99,4 +99,17 @@ runs:
           echo "exitcode=${{ steps.check-gocredits-windows.outputs.exitcode }}" >> $GITHUB_OUTPUT
           exit ${{ steps.check-gocredits-windows.outputs.exitcode }}
         fi
-
+    - name: Update gocredits
+      if: inputs.mode == 'update'
+      shell: bash
+      run: |
+        cd ${{ inputs.path }}
+        gocredits . > ${{ inputs.credits_file }}
+    - name: Commit gocredits file
+      if: inputs.mode == 'update'
+      uses: suzuki-shunsuke/commit-action@cc96d3a3fd959d05e9b79ca395eb30b835aeba24 # v0.0.7
+      with:
+        github-token: ${{ inputs.github-token }}
+        commit_message: 'Update credits file'
+        files: |
+          ${{ inputs.credits_file }}
