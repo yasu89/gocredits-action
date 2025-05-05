@@ -67,7 +67,10 @@ runs:
         cd ${{ inputs.path }}
         if [[ "$RUNNER_OS" == "Windows" ]]; then
           $actual = gocredits | Out-String
-          $expected = $(if (Test-Path '${{ inputs.credits_file }}') { Get-Content -Raw '${{ inputs.credits_file }}' } else { '' })
+          $expected = if (Test-Path '${{ inputs.credits_file }}') { Get-Content -Raw '${{ inputs.credits_file }}' } else { '' }
+          if ($expected -eq $null) {
+            $expected = ''
+          }
           Compare-Object $actual $expected
         else
           diff <(gocredits) ${{ inputs.credits_file }}
