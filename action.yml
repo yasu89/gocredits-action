@@ -67,10 +67,9 @@ runs:
         cd ${{ inputs.path }}
         if [[ "$RUNNER_OS" == "Windows" ]]; then
           powershell -Command "& { diff (gocredits | Out-String) (Get-Content -Raw '${{ inputs.credits_file }}') }"
-          exitcode="$LASTEXITCODE"
         else
           diff <(gocredits) ${{ inputs.credits_file }}
-          exitcode="$?"
         fi
+        exitcode="$?"
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
         exit "$exitcode"
