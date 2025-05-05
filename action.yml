@@ -63,7 +63,9 @@ runs:
       if: inputs.mode == 'check' && runner.os == 'Windows'
       shell: pwsh
       run: |
-        cd ${{ inputs.path }}
+        if (${{ inputs.path }}) {
+          cd ${{ inputs.path }}
+        }
         $actual = gocredits | Out-String
         $expected = if (Test-Path '${{ inputs.credits_file }}') { Get-Content -Raw '${{ inputs.credits_file }}' } else { '' }
         if ($expected -eq $null) {
@@ -83,7 +85,9 @@ runs:
       shell: bash
       run: |
         set +e
-        cd ${{ inputs.path }}
+        if [[ "${{ inputs.path }}" != "" ]]; then
+          cd ${{ inputs.path }}
+        fi
         diff <(gocredits) ${{ inputs.credits_file }}
         exitcode="$?"
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
@@ -103,7 +107,9 @@ runs:
       if: inputs.mode == 'update'
       shell: bash
       run: |
-        cd ${{ inputs.path }}
+        if [[ "${{ inputs.path }}" != "" ]]; then
+          cd ${{ inputs.path }}
+        fi
         gocredits . > ${{ inputs.credits_file }}
     - name: Commit gocredits file
       if: inputs.mode == 'update'

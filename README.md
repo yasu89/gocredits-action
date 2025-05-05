@@ -17,5 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
-    - uses: yasu89/gocredits-action@v0.0.1
+    - uses: actions/setup-go@v5
+      with:
+        go-version: stable
+    - uses: yasu89/gocredits-action@v0.0.2
 ```
