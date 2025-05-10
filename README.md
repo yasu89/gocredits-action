@@ -1,6 +1,6 @@
 # gocredits-action
 
-GitHub Action for [gocredits](https://github.com/Songmu/gocredits)
+GitHub Action for [Songmu/gocredits](https://github.com/Songmu/gocredits)
 
 # Usage
 
