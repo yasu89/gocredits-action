@@ -1,5 +1,7 @@
 # Changelog
 
+## [v1.0.1](https://github.com/yasu89/gocredits-action/compare/v1...v1.0.1) - 2025-05-10
+
 ## [v1.0.0](https://github.com/yasu89/gocredits-action/compare/v0.0.6...v1.0.0) - 2025-05-05
 ### Breaking Changes 🛠
 - Update README.md by @yasu89 in https://github.com/yasu89/gocredits-action/pull/8
