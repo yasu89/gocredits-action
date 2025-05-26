@@ -28,6 +28,10 @@ inputs:
   path:
     description: 'Relative path under $GITHUB_WORKSPACE to execute gocredits'
     required: false
+  skip-missing:
+    description: 'Add -skip-missing option to gocredits'
+    default: 'false'
+    required: false
 outputs:
   exitcode:
     description: 'Exit code of gocredits'
@@ -66,7 +70,8 @@ runs:
         if ('${{ inputs.path }}') {
           cd ${{ inputs.path }}
         }
-        $actual = gocredits | Out-String
+        $skipMissing = if ('${{ inputs.skip-missing }}' -eq 'true') { '-skip-missing' } else { '' }
+        $actual = gocredits $skipMissing | Out-String
         $expected = if (Test-Path '${{ inputs.credits_file }}') { Get-Content -Raw '${{ inputs.credits_file }}' } else { '' }
         if ($expected -eq $null) {
           $expected = ''
@@ -88,7 +93,11 @@ runs:
         if [[ "${{ inputs.path }}" != "" ]]; then
           cd ${{ inputs.path }}
         fi
-        diff <(gocredits) ${{ inputs.credits_file }}
+        SKIP_MISSING_OPTION=""
+        if [[ "${{ inputs.skip-missing }}" == "true" ]]; then
+          SKIP_MISSING_OPTION="-skip-missing"
+        fi
+        diff <(gocredits $SKIP_MISSING_OPTION) ${{ inputs.credits_file }}
         exitcode="$?"
         echo "exitcode=$exitcode" >> $GITHUB_OUTPUT
     - name: Setup check gocredits output
@@ -110,7 +119,11 @@ runs:
         if [[ "${{ inputs.path }}" != "" ]]; then
           cd ${{ inputs.path }}
         fi
-        gocredits . > ${{ inputs.credits_file }}
+        SKIP_MISSING_OPTION=""
+        if [[ "${{ inputs.skip-missing }}" == "true" ]]; then
+          SKIP_MISSING_OPTION="-skip-missing"
+        fi
+        gocredits $SKIP_MISSING_OPTION . > ${{ inputs.credits_file }}
     - name: Commit gocredits file
       if: inputs.mode == 'update'
       uses: suzuki-shunsuke/commit-action@cc96d3a3fd959d05e9b79ca395eb30b835aeba24 # v0.0.7
