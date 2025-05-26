@@ -27,7 +27,7 @@ jobs:
     - name: Install dependencies
       shell: bash
       run: go mod tidy
-    - uses: yasu89/gocredits-action@de0d1b0dbcf41cbb27ef205029e65454045790ee # v1.0.0
+    - uses: yasu89/gocredits-action@73d842e143bb323deffee6af1773db3edc7a8ba4 # v1.1.0
 ```
 
 ## Update credits file
@@ -55,7 +55,7 @@ jobs:
     - name: Install dependencies
       shell: bash
       run: go mod tidy
-    - uses: yasu89/gocredits-action@de0d1b0dbcf41cbb27ef205029e65454045790ee # v1.0.0
+    - uses: yasu89/gocredits-action@73d842e143bb323deffee6af1773db3edc7a8ba4 # v1.1.0
       with:
         mode: 'update'
 ```
