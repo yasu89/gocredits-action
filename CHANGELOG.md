@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.0](https://github.com/yasu89/gocredits-action/compare/v1...v1.1.0) - 2025-05-26
+### Exciting New Features 🎉
+- Add skip-missing option to gocredits action by @yasu89 in https://github.com/yasu89/gocredits-action/pull/11
+
 ## [v1.0.0](https://github.com/yasu89/gocredits-action/compare/v0.0.6...v1.0.0) - 2025-05-05
 ### Breaking Changes 🛠
 - Update README.md by @yasu89 in https://github.com/yasu89/gocredits-action/pull/8
